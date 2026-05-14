@@ -101,6 +101,19 @@ function detectStackOverflowRisk(ast) {
         exampleFix:
           `if (baseCondition) {\n  return;\n}`,
 
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Recursive Termination Logic",
+
+        topic:
+          "Recursion and Call Stack Management",
+
+        learningHint:
+          "Recursive functions must eventually stop calling themselves, otherwise the call stack keeps growing until stack overflow occurs.",
+
         metadata: {
           functionName,
           recursiveCalls

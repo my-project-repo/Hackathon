@@ -104,6 +104,19 @@ function detectArrayMutationDuringIteration(ast) {
         suggestion:
           "Avoid mutating array length during iteration or iterate over a copy instead.",
 
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Safe Collection Traversal",
+
+        topic:
+          "Array Iteration and Mutation Semantics",
+
+        learningHint:
+          "Changing array size during iteration can shift indexes and cause skipped elements or inconsistent traversal behavior.",
+
         metadata: {
           array: object,
           method

@@ -418,10 +418,7 @@ const handleCodeUpdate = debounce((code) => {
   ==========================================
   */
 
-code = code
-  .replace(/⌄/g, "")
-  .replace(/^\d+$/gm, "")
-  .trim();
+code = sanitizeCode(code);
 
 const language = detectProgrammingLanguage();
 
@@ -452,38 +449,13 @@ console.log(
   "color:#ff9800;font-weight:bold;",
   ast
 );
-const offByOneResults =
-  detectOffByOne(ast);
+// ==========================================
+// CENTRALIZED DETECTION LOGGER
+// ==========================================
 
-offByOneResults.forEach(
-  (result) => {
+function logDetectionResults(results) {
 
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-  }
-);
-
-const infiniteLoopResults =
-  detectInfiniteLoop(ast);
-
-infiniteLoopResults.forEach(
-  (result) => {
+  results.forEach((result) => {
 
     console.warn(
       "%cLOGICLENS DETECTION:",
@@ -503,418 +475,127 @@ infiniteLoopResults.forEach(
       result.suggestion
     );
 
-  }
-);
-const recursionResults =
-  detectMissingBaseCase(ast);
+    // =====================================
+    // OPTIONAL FIX EXAMPLE
+    // =====================================
 
-recursionResults.forEach(
-  (result) => {
+    if (result.exampleFix) {
 
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
+      console.log(
+        "%cFIX EXAMPLE:",
+        "color:#ff9800;font-weight:bold;",
+        result.exampleFix
+      );
 
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
+    }
 
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
+    // =====================================
+    // EDUCATIONAL MAPPING LAYER
+    // =====================================
 
-  }
-);
-const nullAccessResults =
-  detectNullAccess(ast);
+    if (result.concept) {
 
-nullAccessResults.forEach(
-  (result) => {
+      console.log(
+        "%cCONCEPT:",
+        "color:#ff5722;font-weight:bold;",
+        result.concept
+      );
 
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
+    }
 
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
+    if (result.topic) {
 
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
+      console.log(
+        "%cTOPIC:",
+        "color:#9c27b0;font-weight:bold;",
+        result.topic
+      );
 
-  }
-);
-const assignmentConditionResults =
-  detectAssignmentInCondition(ast);
+    }
 
-assignmentConditionResults.forEach(
-  (result) => {
+    if (result.learningHint) {
 
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
+      console.log(
+        "%cLEARNING HINT:",
+        "color:#4caf50;font-weight:bold;",
+        result.learningHint
+      );
 
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
+    }
 
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
+  });
 
-  }
-);
-const unreachableCodeResults =
-  detectUnreachableCode(ast);
+}
 
-unreachableCodeResults.forEach(
-  (result) => {
+// ==========================================
+// RUN ALL RULES
+// ==========================================
 
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-  }
-);
-const emptyLoopResults =
-  detectEmptyLoopBody(ast);
-
-emptyLoopResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-  }
-);
-const apiMisuseResults =
-  detectApiMisuse(
-    ast,
-    language
-  );
-
-apiMisuseResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-  }
-);
-const mutationResults =
-  detectArrayMutationDuringIteration(
-    ast
-  );
-
-mutationResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-  }
-);
-const missingReturnResults =
-  detectMissingReturn(ast);
-
-missingReturnResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-  }
-);
-const floatingPointResults =
-  detectFloatingPointEquality(ast);
-
-floatingPointResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-    console.log(
-      "%cFIX EXAMPLE:",
-      "color:#ff9800;font-weight:bold;",
-      result.exampleFix
-    );
-
-  }
+logDetectionResults(
+  detectOffByOne(ast)
 );
 
-const stackOverflowResults =
-  detectStackOverflowRisk(ast);
-
-stackOverflowResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-    console.log(
-      "%cFIX EXAMPLE:",
-      "color:#ff9800;font-weight:bold;",
-      result.exampleFix
-    );
-
-  }
+logDetectionResults(
+  detectInfiniteLoop(ast)
 );
 
-const duplicateConditionResults =
-  detectDuplicateConditions(ast);
-
-duplicateConditionResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-    console.log(
-      "%cFIX EXAMPLE:",
-      "color:#ff9800;font-weight:bold;",
-      result.exampleFix
-    );
-
-  }
+logDetectionResults(
+  detectMissingBaseCase(ast)
 );
 
-const missingEdgeCaseResults =
-  detectMissingEdgeCaseHandling(ast);
-
-missingEdgeCaseResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-    console.log(
-      "%cFIX EXAMPLE:",
-      "color:#ff9800;font-weight:bold;",
-      result.exampleFix
-    );
-
-  }
+logDetectionResults(
+  detectNullAccess(ast)
 );
 
-const slidingWindowResults =
-  detectSlidingWindowNotShrinking(ast);
-
-slidingWindowResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-    console.log(
-      "%cFIX EXAMPLE:",
-      "color:#ff9800;font-weight:bold;",
-      result.exampleFix
-    );
-
-  }
+logDetectionResults(
+  detectAssignmentInCondition(ast)
 );
 
-const dpOverwriteResults =
-  detectDPStateOverwrite(ast);
-
-dpOverwriteResults.forEach(
-  (result) => {
-
-    console.warn(
-      "%cLOGICLENS DETECTION:",
-      "color:#ff1744;font-weight:bold;",
-      result.message
-    );
-
-    console.log(
-      "%cEXPLANATION:",
-      "color:#00bcd4;font-weight:bold;",
-      result.explanation
-    );
-
-    console.log(
-      "%cSUGGESTION:",
-      "color:#8bc34a;font-weight:bold;",
-      result.suggestion
-    );
-
-    console.log(
-      "%cFIX EXAMPLE:",
-      "color:#ff9800;font-weight:bold;",
-      result.exampleFix
-    );
-
-  }
+logDetectionResults(
+  detectUnreachableCode(ast)
 );
+
+logDetectionResults(
+  detectEmptyLoopBody(ast)
+);
+
+logDetectionResults(
+  detectApiMisuse(ast, language)
+);
+
+logDetectionResults(
+  detectArrayMutationDuringIteration(ast)
+);
+
+logDetectionResults(
+  detectMissingReturn(ast)
+);
+
+logDetectionResults(
+  detectFloatingPointEquality(ast)
+);
+
+logDetectionResults(
+  detectStackOverflowRisk(ast)
+);
+
+logDetectionResults(
+  detectDuplicateConditions(ast)
+);
+
+logDetectionResults(
+  detectMissingEdgeCaseHandling(ast)
+);
+
+logDetectionResults(
+  detectSlidingWindowNotShrinking(ast)
+);
+
+logDetectionResults(
+  detectDPStateOverwrite(ast)
+);
+
+
 
 }, 500);
 

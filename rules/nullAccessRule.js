@@ -62,6 +62,19 @@ function detectNullAccess(ast) {
       suggestion:
         "Add null checks or use optional chaining (?.).",
 
+      // =====================================
+      // EDUCATIONAL MAPPING LAYER
+      // =====================================
+
+      concept:
+        "Null Safety and Defensive Programming",
+
+      topic:
+        "Pointers, References, and Object Access",
+
+      learningHint:
+        "Nested object chains may fail if intermediate objects are null or undefined. Safe access patterns help prevent runtime crashes.",
+
       metadata: {
         chain: readableChain
       }

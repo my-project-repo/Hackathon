@@ -110,6 +110,19 @@ function detectSlidingWindowNotShrinking(ast) {
         exampleFix:
           `while (windowInvalid) {\n  left++;\n}`,
 
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Sliding Window Boundary Management",
+
+        topic:
+          "Sliding Window Technique",
+
+        learningHint:
+          "Efficient sliding window algorithms usually require both expansion and shrinking of the window to maintain valid constraints.",
+
         metadata: {
           expandsWindow,
           shrinksWindow

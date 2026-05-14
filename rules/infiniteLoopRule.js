@@ -53,6 +53,19 @@ function detectInfiniteLoop(ast) {
           suggestion:
             "Add a terminating condition or break statement.",
 
+          // =====================================
+          // EDUCATIONAL MAPPING LAYER
+          // =====================================
+
+          concept:
+            "Loop Termination Logic",
+
+          topic:
+            "Control Flow and Iteration",
+
+          learningHint:
+            "Every loop should eventually move toward a stopping condition, otherwise execution may continue forever.",
+
           metadata: {
             loopType:
               node.type
@@ -121,6 +134,19 @@ function detectInfiniteLoop(ast) {
 
         suggestion:
           "Update loop control variables or add a terminating condition.",
+
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Loop State Management",
+
+        topic:
+          "Iteration and Termination Conditions",
+
+        learningHint:
+          "Loop variables usually need to change over time so the loop condition can eventually become false.",
 
         metadata: {
           variables:

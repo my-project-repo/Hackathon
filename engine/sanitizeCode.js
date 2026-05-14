@@ -5,7 +5,7 @@ function sanitizeCode(code) {
   }
 
   // Remove weird Monaco arrows
-  code = code.replace(/›/g, "");
+  code = code.replace(/[›⌄]/g, "");
 
   // Remove isolated line numbers
   code = code.replace(

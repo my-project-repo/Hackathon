@@ -77,6 +77,19 @@ function detectMissingEdgeCaseHandling(ast) {
       exampleFix:
         `if (${arrayName}.length > 0) {\n  ${arrayName}[0];\n}`,
 
+      // =====================================
+      // EDUCATIONAL MAPPING LAYER
+      // =====================================
+
+      concept:
+        "Edge Case Handling",
+
+      topic:
+        "Array Bounds and Defensive Programming",
+
+      learningHint:
+        "Algorithms should safely handle edge cases like empty arrays before accessing elements by index.",
+
       metadata: {
         array: arrayName,
         index: 0

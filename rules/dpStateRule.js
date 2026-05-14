@@ -176,6 +176,19 @@ function detectDPStateOverwrite(ast) {
         exampleFix:
           `Consider reversing loop direction if previous states are being overwritten.`,
 
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Dynamic Programming State Transitions",
+
+        topic:
+          "Dynamic Programming",
+
+        learningHint:
+          "Some DP optimizations require careful iteration order to avoid overwriting states still needed later.",
+
         metadata: {
           direction,
           loopVariable

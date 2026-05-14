@@ -50,6 +50,19 @@ function detectOffByOne(ast) {
       suggestion:
         `Consider using "${leftSide} < ${rightSide}" instead.`,
 
+      // =====================================
+      // EDUCATIONAL MAPPING LAYER
+      // =====================================
+
+      concept:
+        "Boundary Condition Handling",
+
+      topic:
+        "Array Traversal and Loop Logic",
+
+      learningHint:
+        "Arrays are zero-indexed, so using <= length often accesses one invalid extra position.",
+
       metadata: {
         operator: test.operator,
         left: leftSide,

@@ -69,6 +69,19 @@ function detectDuplicateConditions(ast) {
           exampleFix:
             `Use a different condition in the else-if branch.`,
 
+          // =====================================
+          // EDUCATIONAL MAPPING LAYER
+          // =====================================
+
+          concept:
+            "Conditional Branch Analysis",
+
+          topic:
+            "Control Flow and Logical Branching",
+
+          learningHint:
+            "Repeated conditions inside if-else chains can make later branches unreachable because earlier matching branches already capture the same logic.",
+
           metadata: {
             duplicatedCondition:
               condition
