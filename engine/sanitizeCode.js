@@ -38,5 +38,5 @@ code = code.replace(/[\u200B-\u200D\uFEFF]/g, "")
   .trim();
 
 
-  return code.trim();
+  return code;
 }
