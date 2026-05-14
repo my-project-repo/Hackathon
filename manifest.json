@@ -45,6 +45,15 @@
 
 
             "rules/offByOneRule.js",
+            "rules/infiniteLoopRule.js",
+            "rules/recursionRule.js",
+            "rules/nullAccessRule.js",
+            "rules/assignmentConditionRule.js",
+            "rules/unreachableCodeRule.js",
+            "rules/emptyLoopRule.js",
+            "rules/apiMisuseRule.js",
+            "rules/mutatingArrayRule.js",
+            "rules/missingReturnRule.js",
 
             "content.js"
             ],

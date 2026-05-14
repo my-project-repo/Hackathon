@@ -479,6 +479,245 @@ offByOneResults.forEach(
   }
 );
 
+const infiniteLoopResults =
+  detectInfiniteLoop(ast);
+
+infiniteLoopResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const recursionResults =
+  detectMissingBaseCase(ast);
+
+recursionResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const nullAccessResults =
+  detectNullAccess(ast);
+
+nullAccessResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const assignmentConditionResults =
+  detectAssignmentInCondition(ast);
+
+assignmentConditionResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const unreachableCodeResults =
+  detectUnreachableCode(ast);
+
+unreachableCodeResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const emptyLoopResults =
+  detectEmptyLoopBody(ast);
+
+emptyLoopResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const apiMisuseResults =
+  detectApiMisuse(
+    ast,
+    language
+  );
+
+apiMisuseResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const mutationResults =
+  detectArrayMutationDuringIteration(
+    ast
+  );
+
+mutationResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
+const missingReturnResults =
+  detectMissingReturn(ast);
+
+missingReturnResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+  }
+);
 }, 500);
 
 function startRealtimeTracking(adapter) {

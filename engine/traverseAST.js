@@ -1,24 +1,39 @@
-function traverseAst(node, callback) {
+function traverseAst(
+  node,
+  callback,
+  parent = null
+) {
 
   if (!node) {
     return;
   }
 
+  node.parent = parent;
+
   callback(node);
 
   for (const key in node) {
+
+    if (key === "parent") {
+      continue;
+    }
 
     const value = node[key];
 
     if (Array.isArray(value)) {
 
-      value.forEach(child => {
+      value.forEach((child) => {
 
         if (
           child &&
           typeof child === "object"
         ) {
-          traverseAst(child, callback);
+
+          traverseAst(
+            child,
+            callback,
+            node
+          );
         }
 
       });
@@ -28,7 +43,11 @@ function traverseAst(node, callback) {
       typeof value === "object"
     ) {
 
-      traverseAst(value, callback);
+      traverseAst(
+        value,
+        callback,
+        node
+      );
     }
   }
 }
