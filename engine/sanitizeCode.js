@@ -24,6 +24,19 @@ function sanitizeCode(code) {
     /\u00A0/g,
     " "
   );
+   // Remove zero-width unicode chars
+code = code.replace(/[\u200B-\u200D\uFEFF]/g, "")
+  // Remove Monaco visual dots
+  .replace(/·/g, " ")
+
+  // Remove invisible joiners
+  .replace(/‌/g, "")
+
+  // Remove standalone line numbers
+  .replace(/^\d+$/gm, "")
+
+  .trim();
+
 
   return code.trim();
 }

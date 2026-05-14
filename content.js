@@ -419,8 +419,22 @@ const handleCodeUpdate = debounce((code) => {
   */
 
 code = code
-  .replace(/⌄/g, "")
+
+  // Remove zero-width unicode chars
+  .replace(/[\u200B-\u200D\uFEFF]/g, "")
+
+  // Convert non-breaking spaces
+  .replace(/\u00A0/g, " ")
+
+  // Remove Monaco visual dots
+  .replace(/·/g, " ")
+
+  // Remove invisible joiners
+  .replace(/‌/g, "")
+
+  // Remove standalone line numbers
   .replace(/^\d+$/gm, "")
+
   .trim();
 
 const language = detectProgrammingLanguage();
