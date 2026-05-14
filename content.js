@@ -718,6 +718,204 @@ missingReturnResults.forEach(
 
   }
 );
+const floatingPointResults =
+  detectFloatingPointEquality(ast);
+
+floatingPointResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+    console.log(
+      "%cFIX EXAMPLE:",
+      "color:#ff9800;font-weight:bold;",
+      result.exampleFix
+    );
+
+  }
+);
+
+const stackOverflowResults =
+  detectStackOverflowRisk(ast);
+
+stackOverflowResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+    console.log(
+      "%cFIX EXAMPLE:",
+      "color:#ff9800;font-weight:bold;",
+      result.exampleFix
+    );
+
+  }
+);
+
+const duplicateConditionResults =
+  detectDuplicateConditions(ast);
+
+duplicateConditionResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+    console.log(
+      "%cFIX EXAMPLE:",
+      "color:#ff9800;font-weight:bold;",
+      result.exampleFix
+    );
+
+  }
+);
+
+const missingEdgeCaseResults =
+  detectMissingEdgeCaseHandling(ast);
+
+missingEdgeCaseResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+    console.log(
+      "%cFIX EXAMPLE:",
+      "color:#ff9800;font-weight:bold;",
+      result.exampleFix
+    );
+
+  }
+);
+
+const slidingWindowResults =
+  detectSlidingWindowNotShrinking(ast);
+
+slidingWindowResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+    console.log(
+      "%cFIX EXAMPLE:",
+      "color:#ff9800;font-weight:bold;",
+      result.exampleFix
+    );
+
+  }
+);
+
+const dpOverwriteResults =
+  detectDPStateOverwrite(ast);
+
+dpOverwriteResults.forEach(
+  (result) => {
+
+    console.warn(
+      "%cLOGICLENS DETECTION:",
+      "color:#ff1744;font-weight:bold;",
+      result.message
+    );
+
+    console.log(
+      "%cEXPLANATION:",
+      "color:#00bcd4;font-weight:bold;",
+      result.explanation
+    );
+
+    console.log(
+      "%cSUGGESTION:",
+      "color:#8bc34a;font-weight:bold;",
+      result.suggestion
+    );
+
+    console.log(
+      "%cFIX EXAMPLE:",
+      "color:#ff9800;font-weight:bold;",
+      result.exampleFix
+    );
+
+  }
+);
+
 }, 500);
 
 function startRealtimeTracking(adapter) {
