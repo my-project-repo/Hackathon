@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+
+  "name": "LogicLens",
+
+  "version": "1.0.0",
+
+  "description": "Realtime DSA Mentor",
+
+  "permissions": [],
+
+  "host_permissions": [
+    "https://leetcode.com/*",
+    "https://www.hackerrank.com/*",
+    "https://www.geeksforgeeks.org/*",
+    "https://codeforces.com/*",
+    "https://www.codechef.com/*",
+    "https://atcoder.jp/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.leetcode.com/*",
+        "https://*.hackerrank.com/*",
+        "https://*.geeksforgeeks.org/*",
+        "https://codeforces.com/*",
+        "https://www.codechef.com/*",
+        "https://*.atcoder.jp/*"
+      ],
+
+      "js": [
+            "libs/babel.min.js",
+
+            "parsers/javascriptParser.js",
+            "parsers/javaParser.js",
+            "parsers/pythonParser.js",
+
+            "engine/traverseAst.js",
+            "engine/generateReadableCode.js",
+
+
+            "rules/offByOneRule.js",
+
+            "content.js"
+            ],
+
+      "css": ["styles.css"],
+
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+  {
+    "resources": ["libs/babel.min.js"],
+    "matches": ["<all_urls>"]
+  }
+]
+}
