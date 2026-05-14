@@ -54,7 +54,12 @@
             "rules/apiMisuseRule.js",
             "rules/mutatingArrayRule.js",
             "rules/missingReturnRule.js",
-
+            "rules/floatingPointEqualityRule.js",
+            "rules/stackOverflowRule.js",
+            "rules/duplicateConditionRule.js",
+            "rules/missingEdgeCaseRule.js",
+            "rules/slidingWindowShrinkRule.js",
+            "rules/dpStateRule.js",
             "content.js"
             ],
 
