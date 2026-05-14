@@ -122,6 +122,19 @@ function detectMissingReturn(ast) {
       suggestion:
         "Add a return statement if the function is expected to produce output.",
 
+      // =====================================
+      // EDUCATIONAL MAPPING LAYER
+      // =====================================
+
+      concept:
+        "Function Output Semantics",
+
+      topic:
+        "Function Design and Return Values",
+
+      learningHint:
+        "Functions that compute values usually need explicit return statements so results can be used elsewhere in the program.",
+
       metadata: {
         functionName
       }

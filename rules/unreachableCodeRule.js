@@ -53,6 +53,19 @@ function detectUnreachableCode(ast) {
           suggestion:
             "Remove unreachable code or restructure control flow.",
 
+          // =====================================
+          // EDUCATIONAL MAPPING LAYER
+          // =====================================
+
+          concept:
+            "Control Flow Analysis",
+
+          topic:
+            "Program Execution Flow",
+
+          learningHint:
+            "Statements placed after return, break, continue, or throw usually never execute because program control already exited the block.",
+
           metadata: {
             statementType
           }

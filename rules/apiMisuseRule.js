@@ -51,6 +51,15 @@ function detectApiMisuse(ast, language) {
             suggestion:
               `Use "${object}.length()" instead.`,
 
+            concept:
+              "Language-specific API Semantics",
+
+            topic:
+              "Java String APIs",
+
+            learningHint:
+              "Java Strings use methods like length(), while arrays use length property.",
+
             metadata: {
               object
             }
@@ -102,6 +111,15 @@ function detectApiMisuse(ast, language) {
 
             suggestion:
               `Use "len(${object})" instead.`,
+
+            concept:
+              "Language-specific API Semantics",
+
+            topic:
+              "Python List Operations",
+
+            learningHint:
+              "Python lists use len(arr) instead of arr.length like JavaScript.",
 
             metadata: {
               object

@@ -68,6 +68,19 @@ function detectAssignmentInCondition(ast) {
         suggestion:
           `Did you mean "${leftSide} == ${rightSide}" or "${leftSide} === ${rightSide}" instead?`,
 
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Conditional Logic Validation",
+
+        topic:
+          "Comparison vs Assignment Operators",
+
+        learningHint:
+          "Assignment (=) changes values, while comparison operators (== or ===) check equality.",
+
         metadata: {
           left: leftSide,
           right: rightSide,

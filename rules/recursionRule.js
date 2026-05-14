@@ -108,6 +108,19 @@ function detectMissingBaseCase(ast) {
         suggestion:
           "Add a base condition such as if(n === 0) or another terminating case.",
 
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Recursive Termination",
+
+        topic:
+          "Recursion and DFS Logic",
+
+        learningHint:
+          "Every recursive algorithm needs a stopping condition, otherwise recursive calls continue indefinitely and may cause stack overflow.",
+
         metadata: {
           functionName
         }

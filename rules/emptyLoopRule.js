@@ -48,6 +48,19 @@ function detectEmptyLoopBody(ast) {
         suggestion:
           "Remove the semicolon or add a proper loop block using { }.",
 
+        // =====================================
+        // EDUCATIONAL MAPPING LAYER
+        // =====================================
+
+        concept:
+          "Loop Structure Validation",
+
+        topic:
+          "Loop Syntax and Control Flow",
+
+        learningHint:
+          "A semicolon immediately after a loop creates an empty loop body, causing the intended logic block to execute outside the loop.",
+
         metadata: {
           loopType
         }
