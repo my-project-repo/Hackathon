@@ -1,808 +1,566 @@
 /* ==========================================
-   LogicLens Chat Panel Manager
+   LOGICLENS AI MENTOR PANEL — Interactive
 ========================================== */
 
 const LogicLensChatPanel = {
+
   panel: null,
   messagesContainer: null,
   statusDot: null,
   statusText: null,
+
   isMinimized: false,
 
-  // Initialize the chat panel
-  init() {
-    // Inject HTML directly
-    this.injectHTML();
-    // Wait a bit for DOM to update, then setup
-    setTimeout(() => {
+  _readyPromise: null,
+  _readyResolve: null,
+
+  /* Active tab per section group */
+  _activeTabIndex: 0,
+  _currentResults: [],
+
+  /* ==========================================
+     INIT
+  ========================================== */
+
+  async init() {
+
+    if (document.getElementById("logiclens-chat-panel")) {
       this.setupElements();
-      this.attachEventListeners();
-      this.injectStyles();
-    }, 100);
-  },
-
-  // Inject chat panel HTML
-  injectHTML() {
-    const panelHTML = `
-      <!-- LogicLens Chat Panel UI -->
-      <div id="logiclens-chat-panel" class="logiclens-chat-panel">
-        <!-- Header -->
-        <div class="logiclens-chat-header">
-          <div class="logiclens-chat-title">
-            <svg class="logiclens-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 8v4M12 16h.01"></path>
-            </svg>
-            <span>LogicLens</span>
-          </div>
-          <div class="logiclens-chat-controls">
-            <button id="logiclens-minimize-btn" class="logiclens-btn" title="Minimize">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </button>
-            <button id="logiclens-close-btn" class="logiclens-btn" title="Close">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Code Input Area -->
-        <div class="logiclens-code-input-section">
-          <textarea id="logiclens-code-input" class="logiclens-code-textarea" placeholder="Paste your code here to analyze..."></textarea>
-          <button id="logiclens-analyze-btn" class="logiclens-analyze-button">Analyze</button>
-        </div>
-
-        <!-- Messages Container -->
-        <div class="logiclens-chat-messages" id="logiclens-messages">
-          <div class="logiclens-welcome-message">
-            <div class="logiclens-welcome-icon">💡</div>
-            <div class="logiclens-welcome-text">
-              <h3>Welcome to LogicLens</h3>
-              <p>Paste your code above or write in the editor to get realtime DSA mentoring and bug detection.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Status Indicator -->
-        <div class="logiclens-chat-status" id="logiclens-status-indicator">
-          <div class="logiclens-status-dot"></div>
-          <span id="logiclens-status-text">Ready</span>
-        </div>
-      </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', panelHTML);
-  },
-
-  // Setup DOM element references
-  setupElements() {
-    this.panel = document.getElementById('logiclens-chat-panel');
-    this.messagesContainer = document.getElementById('logiclens-messages');
-    this.statusDot = document.querySelector('.logiclens-status-dot');
-    this.statusText = document.getElementById('logiclens-status-text');
-  },
-
-  // Attach event listeners
-  attachEventListeners() {
-    const closeBtn = document.getElementById('logiclens-close-btn');
-    const minimizeBtn = document.getElementById('logiclens-minimize-btn');
-    const analyzeBtn = document.getElementById('logiclens-analyze-btn');
-    const codeInput = document.getElementById('logiclens-code-input');
-
-    closeBtn?.addEventListener('click', () => this.hide());
-    minimizeBtn?.addEventListener('click', () => this.toggle());
-    analyzeBtn?.addEventListener('click', () => this.analyzeCode());
-    
-    // Auto-analyze on paste with slight delay
-    codeInput?.addEventListener('paste', () => {
-      setTimeout(() => this.analyzeCode(), 100);
-    });
-  },
-
-  // Inject the CSS
-  injectStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-/* ==========================================
-   LogicLens Chat Panel Styles
-========================================== */
-
-.logiclens-chat-panel {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 420px;
-  height: 700px;
-  background: #1e1e1e;
-  border: 1px solid #3e3e42;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  z-index: 999999;
-  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-  animation: logiclensSlideIn 0.3s ease-out;
-}
-
-@keyframes logiclensSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) translateX(0);
-  }
-}
-
-/* ==========================================
-   Header
-========================================== */
-
-.logiclens-chat-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid #3e3e42;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #252526;
-}
-
-.logiclens-chat-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #cccccc;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.logiclens-icon {
-  width: 18px;
-  height: 18px;
-  color: #00bcd4;
-}
-
-.logiclens-chat-controls {
-  display: flex;
-  gap: 4px;
-}
-
-.logiclens-btn {
-  background: transparent;
-  border: none;
-  color: #cccccc;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.logiclens-btn:hover {
-  background: #3e3e42;
-  color: #ffffff;
-}
-
-.logiclens-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* ==========================================
-   Messages Container
-========================================== */
-
-.logiclens-chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: #1e1e1e;
-}
-
-/* Scrollbar Styling */
-.logiclens-chat-messages::-webkit-scrollbar {
-  width: 8px;
-}
-
-.logiclens-chat-messages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.logiclens-chat-messages::-webkit-scrollbar-thumb {
-  background: #424245;
-  border-radius: 4px;
-}
-
-.logiclens-chat-messages::-webkit-scrollbar-thumb:hover {
-  background: #4e4e52;
-}
-
-/* ==========================================
-   Welcome Message
-========================================== */
-
-.logiclens-welcome-message {
-  display: flex;
-  gap: 12px;
-  padding: 16px;
-  background: #2d2d30;
-  border-radius: 6px;
-  border-left: 3px solid #00bcd4;
-}
-
-.logiclens-welcome-icon {
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.logiclens-welcome-text h3 {
-  margin: 0 0 6px 0;
-  color: #cccccc;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.logiclens-welcome-text p {
-  margin: 0;
-  color: #a8a8a8;
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-/* ==========================================
-   Error Message Card
-========================================== */
-
-.logiclens-message {
-  display: flex;
-  gap: 12px;
-  padding: 12px;
-  background: #2d2d30;
-  border-radius: 6px;
-  border-left: 3px solid;
-  animation: logiclensMessageSlide 0.3s ease-out;
-}
-
-@keyframes logiclensMessageSlide {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Message Types */
-.logiclens-message.error {
-  border-left-color: #f48771;
-}
-
-.logiclens-message.warning {
-  border-left-color: #dcdcaa;
-}
-
-.logiclens-message.info {
-  border-left-color: #4ec9b0;
-}
-
-.logiclens-message.success {
-  border-left-color: #6a9955;
-}
-
-.logiclens-message-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  border-radius: 50%;
-}
-
-.logiclens-message.error .logiclens-message-icon {
-  background: rgba(244, 135, 113, 0.2);
-  color: #f48771;
-}
-
-.logiclens-message.warning .logiclens-message-icon {
-  background: rgba(220, 220, 170, 0.2);
-  color: #dcdcaa;
-}
-
-.logiclens-message.info .logiclens-message-icon {
-  background: rgba(78, 201, 176, 0.2);
-  color: #4ec9b0;
-}
-
-.logiclens-message.success .logiclens-message-icon {
-  background: rgba(106, 153, 85, 0.2);
-  color: #6a9955;
-}
-
-.logiclens-message-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.logiclens-message-title {
-  color: #cccccc;
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.logiclens-message-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.logiclens-message-label {
-  color: #969696;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.logiclens-message-text {
-  color: #a8a8a8;
-  font-size: 12px;
-  line-height: 1.5;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-}
-
-.logiclens-code-block {
-  background: #1e1e1e;
-  border: 1px solid #3e3e42;
-  border-radius: 4px;
-  padding: 8px;
-  overflow-x: auto;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 11px;
-  color: #d4d4d4;
-}
-
-/* ==========================================
-   Expandable Sections
-========================================== */
-
-.logiclens-section-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  color: #007acc;
-  font-size: 12px;
-  user-select: none;
-  transition: color 0.2s ease;
-}
-
-.logiclens-section-toggle:hover {
-  color: #1ba1e2;
-}
-
-.logiclens-section-toggle-arrow {
-  width: 14px;
-  height: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease;
-  font-size: 10px;
-}
-
-.logiclens-section-toggle-arrow.collapsed {
-  transform: rotate(-90deg);
-}
-
-.logiclens-section-content {
-  display: none;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #3e3e42;
-}
-
-.logiclens-section-content.visible {
-  display: block;
-}
-
-/* ==========================================
-   Status Indicator
-========================================== */
-
-.logiclens-chat-status {
-  padding: 10px 16px;
-  border-top: 1px solid #3e3e42;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #a8a8a8;
-  background: #252526;
-}
-
-.logiclens-status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #6a9955;
-  animation: logiclens-pulse 1.5s infinite;
-}
-
-.logiclens-status-dot.analyzing {
-  background: #dcdcaa;
-  animation: logiclens-pulse 1s infinite;
-}
-
-.logiclens-status-dot.error {
-  background: #f48771;
-  animation: logiclens-pulse-alert 0.6s infinite;
-}
-
-@keyframes logiclens-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes logiclens-pulse-alert {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.1);
-  }
-}
-
-/* ==========================================
-   Minimize State
-========================================== */
-
-.logiclens-chat-panel.minimized {
-  height: 48px;
-}
-
-.logiclens-chat-panel.minimized .logiclens-code-input-section,
-.logiclens-chat-panel.minimized .logiclens-chat-messages,
-.logiclens-chat-panel.minimized .logiclens-chat-status {
-  display: none;
-}
-
-/* ==========================================
-   Code Input Section
-========================================== */
-
-.logiclens-code-input-section {
-  padding: 12px;
-  border-bottom: 1px solid #3e3e42;
-  background: #252526;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.logiclens-code-textarea {
-  width: 100%;
-  height: 80px;
-  background: #1e1e1e;
-  border: 1px solid #3e3e42;
-  border-radius: 4px;
-  color: #d4d4d4;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 12px;
-  padding: 8px;
-  resize: vertical;
-  transition: border-color 0.2s ease;
-}
-
-.logiclens-code-textarea:focus {
-  outline: none;
-  border-color: #007acc;
-  box-shadow: 0 0 0 1px #007acc;
-}
-
-.logiclens-code-textarea::placeholder {
-  color: #6a6a6a;
-}
-
-.logiclens-analyze-button {
-  background: #007acc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.logiclens-analyze-button:hover {
-  background: #1084d7;
-}
-
-.logiclens-analyze-button:active {
-  background: #0060b0;
-}
-
-/* ==========================================
-   Mobile Responsive
-========================================== */
-
-@media (max-width: 600px) {
-  .logiclens-chat-panel {
-    width: calc(100vw - 40px);
-    height: calc(100vh - 100px);
-    max-width: 400px;
-  }
-}
-    `;
-    document.head.appendChild(style);
-  },
-
-  // Display a detection result message
-  displayMessage(result) {
-    if (!this.messagesContainer) return;
-
-    // Remove welcome message if this is the first error
-    const welcomeMsg = this.messagesContainer.querySelector('.logiclens-welcome-message');
-    if (welcomeMsg && this.messagesContainer.children.length === 1) {
-      welcomeMsg.remove();
-    }
-
-    // Determine message type
-    const messageType = result.severity || 'error';
-
-    // Create message element
-    const messageEl = document.createElement('div');
-    messageEl.className = `logiclens-message ${messageType}`;
-
-    // Icon mapping
-    const icons = {
-      error: '⚠️',
-      warning: '⚡',
-      info: 'ℹ️',
-      success: '✓'
-    };
-
-    // Build message content
-    let content = `
-      <div class="logiclens-message-icon">${icons[messageType]}</div>
-      <div class="logiclens-message-content">
-        <div class="logiclens-message-title">${this.escapeHtml(result.message)}</div>
-    `;
-
-    // Add explanation
-    if (result.explanation) {
-      content += `
-        <div class="logiclens-message-field">
-          <div class="logiclens-message-label">Explanation</div>
-          <div class="logiclens-message-text">${this.escapeHtml(result.explanation)}</div>
-        </div>
-      `;
-    }
-
-    // Add suggestion
-    if (result.suggestion) {
-      content += `
-        <div class="logiclens-message-field">
-          <div class="logiclens-message-label">Suggestion</div>
-          <div class="logiclens-message-text">${this.escapeHtml(result.suggestion)}</div>
-        </div>
-      `;
-    }
-
-    // Add example fix
-    if (result.exampleFix) {
-      content += `
-        <div class="logiclens-message-field">
-          <div class="logiclens-section-toggle" onclick="
-            const section = this.parentElement.querySelector('.logiclens-section-content');
-            const arrow = this.querySelector('.logiclens-section-toggle-arrow');
-            section.classList.toggle('visible');
-            arrow.classList.toggle('collapsed');
-          ">
-            <span class="logiclens-section-toggle-arrow">▶</span>
-            <span>Show Example Fix</span>
-          </div>
-          <div class="logiclens-section-content">
-            <div class="logiclens-code-block">${this.escapeHtml(result.exampleFix)}</div>
-          </div>
-        </div>
-      `;
-    }
-
-    // Add learning hint
-    if (result.learningHint) {
-      content += `
-        <div class="logiclens-message-field">
-          <div class="logiclens-message-label">Learning Hint</div>
-          <div class="logiclens-message-text">${this.escapeHtml(result.learningHint)}</div>
-        </div>
-      `;
-    }
-
-    // Add concept and topic
-    if (result.concept || result.topic) {
-      let metadata = '';
-      if (result.concept) {
-        metadata += `<strong>Concept:</strong> ${this.escapeHtml(result.concept)}<br>`;
-      }
-      if (result.topic) {
-        metadata += `<strong>Topic:</strong> ${this.escapeHtml(result.topic)}`;
-      }
-      content += `
-        <div class="logiclens-message-field">
-          <div class="logiclens-message-label">Related Concepts</div>
-          <div class="logiclens-message-text">${metadata}</div>
-        </div>
-      `;
-    }
-
-    content += '</div>';
-    messageEl.innerHTML = content;
-
-    this.messagesContainer.appendChild(messageEl);
-    this.scrollToBottom();
-    this.updateStatus(messageType);
-  },
-
-  // Display multiple detection results
-  displayResults(results) {
-    if (!Array.isArray(results) || results.length === 0) return;
-
-    results.forEach(result => {
-      // Add severity level if not present
-      if (!result.severity) {
-        result.severity = result.message?.includes('Error') ? 'error' : 'warning';
-      }
-      this.displayMessage(result);
-    });
-  },
-
-  // Update status indicator
-  updateStatus(messageType) {
-    if (!this.statusDot || !this.statusText) return;
-
-    const statusMap = {
-      error: { dot: 'error', text: 'Issues found' },
-      warning: { dot: 'analyzing', text: 'Warnings found' },
-      info: { dot: 'analyzing', text: 'Analyzing...' },
-      success: { dot: 'success', text: 'All clear' }
-    };
-
-    const status = statusMap[messageType] || statusMap.info;
-    this.statusDot.className = `logiclens-status-dot ${status.dot}`;
-    this.statusText.textContent = status.text;
-  },
-
-  // Set analyzing state
-  setAnalyzing() {
-    if (this.statusDot && this.statusText) {
-      this.statusDot.className = 'logiclens-status-dot analyzing';
-      this.statusText.textContent = 'Analyzing code...';
-    }
-  },
-
-  // Set ready state
-  setReady() {
-    if (this.statusDot && this.statusText) {
-      this.statusDot.className = 'logiclens-status-dot';
-      this.statusText.textContent = 'Ready';
-    }
-  },
-
-  // Analyze code from textarea
-  analyzeCode() {
-    const codeInput = document.getElementById('logiclens-code-input');
-    if (!codeInput || !codeInput.value.trim()) {
-      alert('Please paste some code first');
+      if (this._readyResolve) this._readyResolve();
       return;
     }
 
-    // Clear previous messages
-    this.clear();
-    this.setAnalyzing();
+    if (!this._readyPromise) {
+      this._readyPromise = new Promise((resolve) => {
+        this._readyResolve = resolve;
+      });
+    }
 
-    // Trigger code update with pasted code
-    const code = codeInput.value;
-    
-    // Use window's global code analysis function if available
-    setTimeout(() => {
-      // Post a message to content script to analyze the code
-      if (window.__analyzeCode) {
-        window.__analyzeCode(code);
-      } else {
-        // Fallback: try to call handleCodeUpdate directly
-        console.log('Analyzing pasted code:', code);
-        this.setReady();
-      }
-    }, 100);
+    await this.injectStyles();
+    await this.injectHTML();
+    this.setupElements();
+    this.attachEventListeners();
+
+    if (this._readyResolve) this._readyResolve();
   },
 
-  // Scroll to bottom of messages
+  /* ==========================================
+     READY
+  ========================================== */
+
+  async waitUntilReady() {
+    if (!this._readyPromise) {
+      await this.init();
+      return;
+    }
+    await this._readyPromise;
+    this._ensureElements();
+  },
+
+  /* ==========================================
+     ENSURE DOM
+  ========================================== */
+
+  _ensureElements() {
+    if (!this.panel)
+      this.panel = document.getElementById("logiclens-chat-panel");
+    if (!this.messagesContainer)
+      this.messagesContainer = document.getElementById("logiclens-messages");
+    if (!this.statusDot)
+      this.statusDot = document.getElementById("ll-status-dot");
+    if (!this.statusText)
+      this.statusText = document.getElementById("ll-status-text");
+  },
+
+  /* ==========================================
+     HTML INJECTION
+  ========================================== */
+
+  async injectHTML() {
+    if (document.getElementById("logiclens-chat-panel")) return;
+    try {
+      const htmlURL = chrome.runtime.getURL("ui/chat-panel.html");
+      const response = await fetch(htmlURL);
+      const html = await response.text();
+      document.body.insertAdjacentHTML("beforeend", html);
+    } catch (error) {
+      console.error("LogicLens HTML Injection Failed", error);
+    }
+  },
+
+  /* ==========================================
+     CSS INJECTION
+  ========================================== */
+
+  async injectStyles() {
+    if (document.getElementById("logiclens-styles")) return;
+    const link = document.createElement("link");
+    link.id = "logiclens-styles";
+    link.rel = "stylesheet";
+    link.href = chrome.runtime.getURL("ui/chat-panel.css");
+    document.head.appendChild(link);
+  },
+
+  /* ==========================================
+     SETUP ELEMENTS
+  ========================================== */
+
+  setupElements() {
+    this.panel = document.getElementById("logiclens-chat-panel");
+    this.messagesContainer = document.getElementById("logiclens-messages");
+    this.statusDot = document.getElementById("ll-status-dot");
+    this.statusText = document.getElementById("ll-status-text");
+  },
+
+  /* ==========================================
+     ATTACH GLOBAL EVENTS
+  ========================================== */
+
+  attachEventListeners() {
+
+    const closeBtn = document.getElementById("logiclens-close-btn");
+    const minimizeBtn = document.getElementById("logiclens-minimize-btn");
+
+    closeBtn?.addEventListener("click", () => this.hide());
+    minimizeBtn?.addEventListener("click", () => this.toggle());
+
+    /* ==========================================
+       EVENT DELEGATION — handles all dynamic
+       elements in the messages container
+    ========================================== */
+    document.addEventListener("click", (e) => {
+
+      /* TAB CLICKS */
+      const tab = e.target.closest(".ll-err-tab");
+      if (tab) {
+        const idx = parseInt(tab.dataset.index, 10);
+        if (!isNaN(idx)) this._switchTab(idx);
+        return;
+      }
+
+      /* TOGGLE SECTION CLICKS */
+      const toggle = e.target.closest(".ll-expandable-toggle");
+      if (toggle) {
+        this._toggleSection(toggle);
+        return;
+      }
+
+    });
+
+  },
+
+  /* ==========================================
+     MAIN RENDER
+  ========================================== */
+
+  async displayResults(results = []) {
+
+    await this.waitUntilReady();
+    this._ensureElements();
+
+    if (!this.messagesContainer) return;
+
+    this._currentResults = results;
+    this._activeTabIndex = 0;
+
+    this.messagesContainer.innerHTML = "";
+
+    if (results.length === 0) {
+      this.renderSuccessState();
+      return;
+    }
+
+    this.updateErrorCount(results.length);
+    this.updateScore(results);
+    this.updateStatus("error");
+
+    /* Render tab bar once at the top */
+    const tabBar = document.createElement("div");
+    tabBar.id = "ll-global-tabs";
+    tabBar.className = "ll-section ll-tabs-section";
+    tabBar.innerHTML = this._generateTabs(results);
+    this.messagesContainer.appendChild(tabBar);
+
+    /* Render all error panels; only the first is visible */
+    results.forEach((result, index) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "ll-section ll-error-panel";
+      wrapper.id = `ll-panel-${index}`;
+      wrapper.style.display = index === 0 ? "block" : "none";
+      wrapper.innerHTML = this._generateErrorPanel(result, index);
+      this.messagesContainer.appendChild(wrapper);
+    });
+
+    this.scrollToBottom();
+
+  },
+
+  /* ==========================================
+     TAB SWITCH
+  ========================================== */
+
+  _switchTab(index) {
+
+    if (index === this._activeTabIndex) return;
+
+    /* Animate out current panel */
+    const currentPanel = document.getElementById(`ll-panel-${this._activeTabIndex}`);
+    if (currentPanel) {
+      currentPanel.classList.add("ll-panel-exit");
+      setTimeout(() => {
+        currentPanel.style.display = "none";
+        currentPanel.classList.remove("ll-panel-exit");
+      }, 200);
+    }
+
+    this._activeTabIndex = index;
+
+    /* Update tab highlight */
+    document.querySelectorAll(".ll-err-tab").forEach((t, i) => {
+      t.classList.toggle("active", i === index);
+    });
+
+    /* Animate in new panel */
+    setTimeout(() => {
+      const nextPanel = document.getElementById(`ll-panel-${index}`);
+      if (nextPanel) {
+        nextPanel.style.display = "block";
+        nextPanel.classList.add("ll-panel-enter");
+        setTimeout(() => nextPanel.classList.remove("ll-panel-enter"), 300);
+      }
+    }, 210);
+
+  },
+
+  /* ==========================================
+     TOGGLE EXPANDABLE SECTION
+  ========================================== */
+
+  _toggleSection(toggleEl) {
+
+    const targetId = toggleEl.dataset.target;
+    if (!targetId) return;
+
+    const content = document.getElementById(targetId);
+    if (!content) return;
+
+    const isOpen = content.classList.contains("visible");
+    const chevron = toggleEl.querySelector(".ll-chevron");
+
+    if (isOpen) {
+      content.style.maxHeight = content.scrollHeight + "px";
+      requestAnimationFrame(() => {
+        content.style.maxHeight = "0";
+        content.classList.remove("visible");
+        if (chevron) chevron.style.transform = "rotate(0deg)";
+      });
+    } else {
+      content.classList.add("visible");
+      content.style.maxHeight = "0";
+      requestAnimationFrame(() => {
+        content.style.maxHeight = content.scrollHeight + 40 + "px";
+        if (chevron) chevron.style.transform = "rotate(180deg)";
+      });
+      setTimeout(() => {
+        content.style.maxHeight = "none";
+      }, 350);
+    }
+
+  },
+
+  /* ==========================================
+     SUCCESS STATE
+  ========================================== */
+
+  renderSuccessState() {
+
+    this.messagesContainer.innerHTML = `
+      <div class="ll-section">
+        <div class="ll-success-card">
+          <div class="ll-success-icon">✓</div>
+          <div class="ll-success-title">NO LOGIC ISSUES DETECTED</div>
+          <div class="ll-success-desc">
+            Your code currently matches no LogicLens warning patterns.<br><br>
+            Try edge cases and complexity optimization next.
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.updateErrorCount(0);
+    this.updateStatus("success");
+    this.updateScore([]);
+
+  },
+
+  /* ==========================================
+     GENERATE TABS
+  ========================================== */
+
+  _generateTabs(results) {
+    return `
+      <div class="ll-section-label">DETECTED ERRORS</div>
+      <div class="ll-error-tabs">
+        ${results.map((r, i) => `
+          <button
+            class="ll-err-tab ${i === 0 ? "active" : ""}"
+            data-index="${i}"
+            title="${this.escapeHtml(r.message || r.type || 'Error')}"
+          >
+            ${this.escapeHtml(r.type || "ERR")}
+          </button>
+        `).join("")}
+      </div>
+    `;
+  },
+
+  /* ==========================================
+     GENERATE FULL ERROR PANEL
+  ========================================== */
+
+  _generateErrorPanel(result, index) {
+
+    const severity = result.severity || "warning";
+    const panelId = `panel-${index}`;
+
+    return `
+
+      <!-- ERROR CARD -->
+      <div class="ll-error-card ${severity}">
+        <div class="ll-error-type">${this.escapeHtml(result.message || "Logic Error")}</div>
+        <div class="ll-error-desc">${this.escapeHtml(result.explanation || "")}</div>
+        <div class="ll-error-loc">
+          <span class="ll-error-loc-badge">${this.escapeHtml(result.type || "AST")}</span>
+        </div>
+      </div>
+
+      <!-- VISUALIZATION -->
+      ${this._generateVisualization(result, panelId)}
+
+      <!-- CS CONCEPT (expandable) -->
+      ${this._generateConceptSection(result, panelId)}
+
+      <!-- SUGGESTED FIX (expandable) -->
+      ${this._generateFixSection(result, panelId)}
+
+    `;
+
+  },
+
+  /* ==========================================
+     VISUALIZATION
+  ========================================== */
+
+  _generateVisualization(result, panelId) {
+
+    if (result.type === "OFF_BY_ONE") {
+      return `
+        <div class="ll-section-label">// EXECUTION VISUALIZATION</div>
+        <div class="ll-array-viz">
+          <div class="ll-array-meta">arr = [2, 7, 11, 15]</div>
+          <div class="array-label-row">
+            <div class="ll-idx-label">idx 0</div>
+            <div class="ll-idx-label">idx 1</div>
+            <div class="ll-idx-label">idx 2</div>
+            <div class="ll-idx-label">idx 3</div>
+            <div class="ll-idx-label error-idx">idx 4 !</div>
+          </div>
+          <div class="array-row">
+            <div class="ll-array-cell">2</div>
+            <div class="ll-array-cell">7</div>
+            <div class="ll-array-cell">11</div>
+            <div class="ll-array-cell">15</div>
+            <div class="ll-ghost-cell">?</div>
+          </div>
+          <div class="ll-viz-annotation">
+            Loop reaches invalid index because <code>i &lt;= arr.length</code>.<br>
+            Safe condition: <code>i &lt; arr.length</code>
+          </div>
+        </div>
+      `;
+    }
+
+    if (result.type === "INFINITE_LOOP" || result.type === "POSSIBLE_INFINITE_LOOP") {
+      return `
+        <div class="ll-section-label">// LOOP TRACE</div>
+        <div class="ll-loop-trace">
+          <div class="ll-loop-header">
+            <span class="ll-loop-badge">ITER ∞</span>
+            <span class="ll-loop-status-text">never exits</span>
+          </div>
+          <div class="ll-loop-bar-track">
+            <div class="ll-loop-bar-fill"></div>
+          </div>
+          <div class="ll-loop-hint">Loop condition variables are never updated — the condition never becomes false.</div>
+        </div>
+      `;
+    }
+
+    return "";
+
+  },
+
+  /* ==========================================
+     CS CONCEPT SECTION (expandable)
+  ========================================== */
+
+  _generateConceptSection(result, panelId) {
+
+    if (!result.concept && !result.topic) return "";
+
+    const id = `concept-${panelId}`;
+
+    return `
+      <div class="ll-section-label">CS CONCEPT MAPPING</div>
+      <div class="ll-expandable-card">
+        <button class="ll-expandable-toggle" data-target="${id}">
+          <div class="ll-expandable-toggle-left">
+            <span class="ll-concept-icon">📘</span>
+            <span class="ll-concept-name">${this.escapeHtml(result.concept || "Programming Concept")}</span>
+          </div>
+          <span class="ll-chevron">▾</span>
+        </button>
+        <div class="ll-expandable-content" id="${id}">
+          <div class="ll-concept-body">${this.escapeHtml(result.learningHint || "")}</div>
+          ${result.topic ? `<div class="ll-concept-rule">${this.escapeHtml(result.topic)}</div>` : ""}
+        </div>
+      </div>
+    `;
+
+  },
+
+  /* ==========================================
+     FIX SECTION (expandable)
+  ========================================== */
+
+  _generateFixSection(result, panelId) {
+
+    if (!result.exampleFix) return "";
+
+    const id = `fix-${panelId}`;
+
+    return `
+      <div class="ll-section-label">// SUGGESTED FIX</div>
+      <div class="ll-expandable-card fix-card">
+        <button class="ll-expandable-toggle" data-target="${id}">
+          <div class="ll-expandable-toggle-left">
+            <span class="ll-fix-icon">✓</span>
+            <span class="ll-fix-toggle-label">SHOW CORRECTED LOGIC</span>
+          </div>
+          <span class="ll-chevron">▾</span>
+        </button>
+        <div class="ll-expandable-content" id="${id}">
+          <div class="ll-fix-code">${this.escapeHtml(result.exampleFix)}</div>
+        </div>
+      </div>
+    `;
+
+  },
+
+  /* ==========================================
+     ERROR COUNT
+  ========================================== */
+
+  updateErrorCount(count = 0) {
+    const countEl = document.getElementById("logiclens-error-count");
+    if (!countEl) return;
+    countEl.textContent = `${count} ERROR${count !== 1 ? "S" : ""}`;
+    countEl.className = "analysis-count" + (count > 0 ? " has-errors" : "");
+  },
+
+  /* ==========================================
+     SCORE
+  ========================================== */
+
+  updateScore(results) {
+    const fill = document.getElementById("ll-score-fill");
+    const value = document.getElementById("ll-score-val");
+    if (!fill || !value) return;
+
+    const score = Math.max(0, 100 - (results.length * 12));
+    fill.style.width = `${score}%`;
+    value.textContent = `${score}%`;
+  },
+
+  /* ==========================================
+     STATUS
+  ========================================== */
+
+  updateStatus(type = "success") {
+    this._ensureElements();
+    if (!this.statusDot || !this.statusText) return;
+
+    this.statusDot.className = "status-dot";
+
+    if (type === "error") {
+      this.statusDot.classList.add("error");
+      this.statusText.textContent = "Logic issues detected";
+    } else if (type === "warning") {
+      this.statusDot.classList.add("analyzing");
+      this.statusText.textContent = "Analyzing...";
+    } else {
+      this.statusText.textContent = "Tracking Monaco Editor";
+    }
+  },
+
+  setAnalyzing() { this.updateStatus("warning"); },
+  setReady() { this.updateStatus("success"); },
+
+  /* ==========================================
+     CLEAR
+  ========================================== */
+
+  clear() {
+    if (this.messagesContainer) this.messagesContainer.innerHTML = "";
+  },
+
+  /* ==========================================
+     SCROLL
+  ========================================== */
+
   scrollToBottom() {
     setTimeout(() => {
+      this._ensureElements();
       if (this.messagesContainer) {
-        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        this.messagesContainer.scrollTop = 0; // scroll to top to show tabs first
       }
     }, 0);
   },
 
-  // Toggle minimize
+  /* ==========================================
+     PANEL TOGGLE / SHOW / HIDE
+  ========================================== */
+
   toggle() {
-    if (this.panel) {
-      this.isMinimized = !this.isMinimized;
-      this.panel.classList.toggle('minimized');
-    }
+    if (!this.panel) return;
+    this.isMinimized = !this.isMinimized;
+    this.panel.classList.toggle("minimized");
   },
 
-  // Show panel
   show() {
-    if (this.panel) {
-      this.panel.style.display = 'flex';
-    }
+    if (this.panel) this.panel.style.display = "flex";
   },
 
-  // Hide panel
   hide() {
-    if (this.panel) {
-      this.panel.style.display = 'none';
-    }
+    if (this.panel) this.panel.style.display = "none";
   },
 
-  // Clear all messages
-  clear() {
-    if (this.messagesContainer) {
-      this.messagesContainer.innerHTML = `
-        <div class="logiclens-welcome-message">
-          <div class="logiclens-welcome-icon">💡</div>
-          <div class="logiclens-welcome-text">
-            <h3>Welcome to LogicLens</h3>
-            <p>Write or paste your code to get realtime DSA mentoring and bug detection.</p>
-          </div>
-        </div>
-      `;
-    }
-    this.setReady();
-  },
+  /* ==========================================
+     ESCAPE HTML
+  ========================================== */
 
-  // Escape HTML to prevent XSS
   escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
+    if (!text) return "";
+    const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   }
+
 };
 
-// Initialize chat panel when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    LogicLensChatPanel.init();
-  });
-} else {
-  LogicLensChatPanel.init();
-}
+/* ==========================================
+   INIT
+========================================== */
+
+LogicLensChatPanel.init();
+window.LogicLensChatPanel = LogicLensChatPanel;

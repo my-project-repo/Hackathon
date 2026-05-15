@@ -1,43 +1,67 @@
-<!-- LogicLens Chat Panel UI -->
-<div id="logiclens-chat-panel" class="logiclens-chat-panel">
-  <!-- Header -->
-  <div class="logiclens-chat-header">
-    <div class="logiclens-chat-title">
-      <svg class="logiclens-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M12 8v4M12 16h.01"></path>
-      </svg>
-      <span>LogicLens</span>
-    </div>
-    <div class="logiclens-chat-controls">
-      <button id="logiclens-minimize-btn" class="logiclens-btn" title="Minimize">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      </button>
-      <button id="logiclens-close-btn" class="logiclens-btn" title="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-  </div>
+<div
+  id="logiclens-chat-panel"
+  class="mentor-panel"
+>
 
-  <!-- Messages Container -->
-  <div class="logiclens-chat-messages" id="logiclens-messages">
-    <div class="logiclens-welcome-message">
-      <div class="logiclens-welcome-icon">💡</div>
-      <div class="logiclens-welcome-text">
-        <h3>Welcome to LogicLens</h3>
-        <p>Write or paste your code to get realtime DSA mentoring and bug detection.</p>
+  <!-- HEADER -->
+  <div class="mentor-header">
+
+    <div class="mentor-title-group">
+
+      <div class="mentor-title">
+        AI LOGIC MENTOR
       </div>
+
+      <div class="mentor-subtitle">
+        REALTIME AST ANALYSIS
+      </div>
+
     </div>
+
+    <div
+      class="analysis-count"
+      id="logiclens-error-count"
+    >
+      0 ERRORS
+    </div>
+
   </div>
 
-  <!-- Status Indicator -->
-  <div class="logiclens-chat-status" id="logiclens-status-indicator">
-    <div class="logiclens-status-dot"></div>
-    <span id="logiclens-status-text">Ready</span>
+  <!-- DYNAMIC CONTENT -->
+  <div
+    id="logiclens-messages"
+    class="logiclens-messages"
+  >
+
+    <div class="logiclens-empty-state">
+
+      <div class="empty-icon">
+        ⚡
+      </div>
+
+      <div class="empty-title">
+        LogicLens Active
+      </div>
+
+      <div class="empty-desc">
+
+        Realtime code analysis is running.
+
+      </div>
+
+    </div>
+
   </div>
+
+  <!-- STATUS BAR -->
+  <div class="logiclens-status-bar">
+
+    <div class="status-dot"></div>
+
+    <div class="status-text">
+      Tracking Monaco Editor
+    </div>
+
+  </div>
+
 </div>
