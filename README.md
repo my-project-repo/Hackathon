@@ -43,8 +43,6 @@ Used for competitive programming platforms like:
 - LeetCode  
 - Codeforces  
 - CodeChef  
-- HackerRank  
-- GeeksforGeeks  
 
 ### Features:
 - Detects code directly inside browser editors  
@@ -105,6 +103,72 @@ Every detection includes:
 
 ---
 
+# 🧠 Project Architecture
+
+```bash
+Hackathon/
+│
+├── LogicLens - Chrome Extension/
+│   │
+│   ├── engine/
+│   │   └── Core detection and analysis engine
+│   │
+│   ├── libs/
+│   │   └── External libraries and utilities
+│   │
+│   ├── parsers/
+│   │   └── AST parsing and syntax processing
+│   │
+│   ├── rules/
+│   │   └── Logic bug detection rules
+│   │
+│   ├── ui/
+│   │   └── Interactive chat panel UI
+│   │
+│   ├── background.js
+│   │   └── Background service worker
+│   │
+│   ├── content.js
+│   │   └── Injects detection into coding platforms
+│   │
+│   ├── popup.html
+│   │   └── Chrome extension popup UI
+│   │
+│   ├── styles.css
+│   │   └── Extension styling
+│   │
+│   ├── manifest.json
+│   │   └── Chrome extension configuration
+│   │
+│   └── package.json
+│
+├── LogicLens - VS Code Extension/
+│   │
+│   ├── .vscode/
+│   │   └── VS Code extension configs
+│   │
+│   ├── src/
+│   │   └── Main extension source code
+│   │
+│   ├── package.json
+│   │   └── Extension metadata and commands
+│   │
+│   ├── tsconfig.json
+│   │   └── TypeScript configuration
+│   │
+│   ├── eslint.config.mjs
+│   │   └── Linting configuration
+│   │
+│   ├── CHANGELOG.md
+│   │   └── Extension updates and versions
+│   │
+│   └── README.md
+│
+└── README.md
+```
+
+---
+
 # 🧠 Architecture
 
 LogicLens is built using:
@@ -134,3 +198,92 @@ OR via terminal:
 
 ```bash
 code --install-extension logiclens-0.0.1.vsix
+```
+
+If your file is zipped:
+
+```bash
+unzip logiclens-0.0.1.vsix.zip
+code --install-extension logiclens-0.0.1.vsix
+```
+
+---
+
+# 🌐 Chrome Extension Installation
+
+1. Open Chrome  
+2. Go to:
+
+```bash
+chrome://extensions
+```
+
+3. Enable **Developer Mode**  
+4. Click **Load unpacked**  
+5. Select:
+
+```bash
+LogicLens - Chrome Extension/
+```
+
+6. LogicLens is now installed
+
+---
+
+# 🎯 Vision
+
+LogicLens aims to become an AI-powered programming mentor capable of:
+
+- Explaining logic mistakes  
+- Teaching DSA interactively  
+- Improving debugging skills  
+- Assisting interview preparation  
+- Helping students learn coding faster  
+
+---
+
+# 📌 Current Status
+
+✅ Chrome Extension  
+✅ VS Code Extension  
+✅ JavaScript Support  
+✅ Real-time Analysis  
+✅ Interactive UI  
+🚧 AI Mentor Integration  
+🚧 Multi-language Support  
+🚧 Algorithm Visualization  
+
+---
+
+# 🤝 Contributing
+
+Contributions, ideas, and feedback are always welcome.
+
+- Report bugs  
+- Suggest detectors  
+- Improve UI/UX  
+- Add language support  
+- Improve educational hints  
+
+---
+
+# ⭐ Support the Project
+
+If you like LogicLens:
+
+- ⭐ Star the repository  
+- 🐛 Report issues  
+- 💡 Suggest features  
+- 🚀 Share it with developers and students  
+
+---
+
+<div align="center">
+
+# 💙 LogicLens
+
+### Learn Logic, Not Just Syntax
+
+Built for students, developers, and interview preparation.
+
+</div>
