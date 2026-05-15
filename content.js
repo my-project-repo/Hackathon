@@ -449,6 +449,35 @@ console.log(
   "color:#ff9800;font-weight:bold;",
   ast
 );
+
+const symbolTable = buildSymbolTable(ast);
+
+console.log(
+  "%cSYMBOL TABLE:",
+  "color:#ff9800;font-weight:bold;",
+  symbolTable
+);
+
+const detectedPatterns =
+  classifyPatterns(ast);
+
+console.log(
+  "%cPATTERN CLASSIFIER:",
+  "color:#e91e63;font-weight:bold;",
+  detectedPatterns
+);
+
+const inferredType =
+  inferType(
+    ast.program.body?.[0],
+    symbolTable
+  );
+
+console.log(
+  "%cTYPE INFERENCE TEST:",
+  "color:#03a9f4;font-weight:bold;",
+  inferredType
+);
 // ==========================================
 // CENTRALIZED DETECTION LOGGER
 // ==========================================
@@ -593,6 +622,20 @@ logDetectionResults(
 
 logDetectionResults(
   detectDPStateOverwrite(ast)
+);
+
+logDetectionResults(
+  detectBinarySearchMidOverflow(ast)
+);
+logDetectionResults(
+  detectModuloByZeroRisk(ast)
+);
+logDetectionResults(
+  detectMissingHashMapExistenceCheck(ast)
+);
+
+logDetectionResults(
+  detectIncorrectLoopUpdate(ast)
 );
 
 
