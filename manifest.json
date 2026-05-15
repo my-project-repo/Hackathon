@@ -60,6 +60,10 @@
             "rules/missingEdgeCaseRule.js",
             "rules/slidingWindowShrinkRule.js",
             "rules/dpStateRule.js",
+            "rules/binarySearchMidOverflowRule.js",
+            "rules/moduloByZeroRule.js",
+            "rules/missingHashMapExistenceRule.js",
+            "rules/incorrectLoopUpdateRule.js",
             
         
             "content.js"

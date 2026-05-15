@@ -595,6 +595,20 @@ logDetectionResults(
   detectDPStateOverwrite(ast)
 );
 
+logDetectionResults(
+  detectBinarySearchMidOverflow(ast)
+);
+logDetectionResults(
+  detectModuloByZeroRisk(ast)
+);
+logDetectionResults(
+  detectMissingHashMapExistenceCheck(ast)
+);
+
+logDetectionResults(
+  detectIncorrectLoopUpdate(ast)
+);
+
 
 
 }, 500);
