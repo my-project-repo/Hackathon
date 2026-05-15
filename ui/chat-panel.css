@@ -1,0 +1,392 @@
+/* ==========================================
+   LogicLens Chat Panel Styles
+========================================== */
+
+.logiclens-chat-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 420px;
+  height: 600px;
+  background: #1e1e1e;
+  border: 1px solid #3e3e42;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  z-index: 999999;
+  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  animation: logiclensSlideIn 0.3s ease-out;
+}
+
+@keyframes logiclensSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* ==========================================
+   Header
+========================================== */
+
+.logiclens-chat-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #3e3e42;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #252526;
+}
+
+.logiclens-chat-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cccccc;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.logiclens-icon {
+  width: 18px;
+  height: 18px;
+  color: #00bcd4;
+}
+
+.logiclens-chat-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.logiclens-btn {
+  background: transparent;
+  border: none;
+  color: #cccccc;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.logiclens-btn:hover {
+  background: #3e3e42;
+  color: #ffffff;
+}
+
+.logiclens-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==========================================
+   Messages Container
+========================================== */
+
+.logiclens-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #1e1e1e;
+}
+
+/* Scrollbar Styling */
+.logiclens-chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.logiclens-chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.logiclens-chat-messages::-webkit-scrollbar-thumb {
+  background: #424245;
+  border-radius: 4px;
+}
+
+.logiclens-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #4e4e52;
+}
+
+/* ==========================================
+   Welcome Message
+========================================== */
+
+.logiclens-welcome-message {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #2d2d30;
+  border-radius: 6px;
+  border-left: 3px solid #00bcd4;
+}
+
+.logiclens-welcome-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.logiclens-welcome-text h3 {
+  margin: 0 0 6px 0;
+  color: #cccccc;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.logiclens-welcome-text p {
+  margin: 0;
+  color: #a8a8a8;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ==========================================
+   Error Message Card
+========================================== */
+
+.logiclens-message {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #2d2d30;
+  border-radius: 6px;
+  border-left: 3px solid;
+  animation: logiclensMessageSlide 0.3s ease-out;
+}
+
+@keyframes logiclensMessageSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Message Types */
+.logiclens-message.error {
+  border-left-color: #f48771;
+}
+
+.logiclens-message.warning {
+  border-left-color: #dcdcaa;
+}
+
+.logiclens-message.info {
+  border-left-color: #4ec9b0;
+}
+
+.logiclens-message.success {
+  border-left-color: #6a9955;
+}
+
+.logiclens-message-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 50%;
+}
+
+.logiclens-message.error .logiclens-message-icon {
+  background: rgba(244, 135, 113, 0.2);
+  color: #f48771;
+}
+
+.logiclens-message.warning .logiclens-message-icon {
+  background: rgba(220, 220, 170, 0.2);
+  color: #dcdcaa;
+}
+
+.logiclens-message.info .logiclens-message-icon {
+  background: rgba(78, 201, 176, 0.2);
+  color: #4ec9b0;
+}
+
+.logiclens-message.success .logiclens-message-icon {
+  background: rgba(106, 153, 85, 0.2);
+  color: #6a9955;
+}
+
+.logiclens-message-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.logiclens-message-title {
+  color: #cccccc;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.logiclens-message-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logiclens-message-label {
+  color: #969696;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.logiclens-message-text {
+  color: #a8a8a8;
+  font-size: 12px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+.logiclens-code-block {
+  background: #1e1e1e;
+  border: 1px solid #3e3e42;
+  border-radius: 4px;
+  padding: 8px;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 11px;
+}
+
+/* ==========================================
+   Expandable Sections
+========================================== */
+
+.logiclens-section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #007acc;
+  font-size: 12px;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.logiclens-section-toggle:hover {
+  color: #1ba1e2;
+}
+
+.logiclens-section-toggle-arrow {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.logiclens-section-toggle-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+
+.logiclens-section-content {
+  display: none;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #3e3e42;
+}
+
+.logiclens-section-content.visible {
+  display: block;
+}
+
+/* ==========================================
+   Status Indicator
+========================================== */
+
+.logiclens-chat-status {
+  padding: 10px 16px;
+  border-top: 1px solid #3e3e42;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #a8a8a8;
+  background: #252526;
+}
+
+.logiclens-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6a9955;
+  animation: logiclens-pulse 1.5s infinite;
+}
+
+.logiclens-status-dot.analyzing {
+  background: #dcdcaa;
+  animation: logiclens-pulse 1s infinite;
+}
+
+.logiclens-status-dot.error {
+  background: #f48771;
+  animation: logiclens-pulse-alert 0.6s infinite;
+}
+
+@keyframes logiclens-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes logiclens-pulse-alert {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* ==========================================
+   Minimize State
+========================================== */
+
+.logiclens-chat-panel.minimized {
+  height: 48px;
+}
+
+.logiclens-chat-panel.minimized .logiclens-chat-messages,
+.logiclens-chat-panel.minimized .logiclens-chat-status {
+  display: none;
+}
+
+/* ==========================================
+   Mobile Responsive
+========================================== */
+
+@media (max-width: 600px) {
+  .logiclens-chat-panel {
+    width: calc(100vw - 40px);
+    height: calc(100vh - 100px);
+    max-width: 400px;
+  }
+}
