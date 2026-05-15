@@ -42,6 +42,9 @@
 
             "engine/traverseAst.js",
             "engine/generateReadableCode.js",
+            "engine/symbolTable.js",
+            "engine/patternClassifier.js",
+            "engine/typeInference.js",
 
 
             "rules/offByOneRule.js",
@@ -64,6 +67,8 @@
             "rules/moduloByZeroRule.js",
             "rules/missingHashMapExistenceRule.js",
             "rules/incorrectLoopUpdateRule.js",
+
+
             
         
             "content.js"
