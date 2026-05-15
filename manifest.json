@@ -68,8 +68,7 @@
             "rules/missingHashMapExistenceRule.js",
             "rules/incorrectLoopUpdateRule.js",
 
-
-            
+            "ui/chat-panel.js",
         
             "content.js"
             ],
@@ -84,9 +83,14 @@
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
-  {
-    "resources": ["libs/babel.min.js"],
-    "matches": ["<all_urls>"]
-  }
-]
+    {
+      "resources": [
+        "libs/babel.min.js",
+        "ui/chat-panel.html",
+        "ui/chat-panel.css",
+        "ui/chat-panel.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
