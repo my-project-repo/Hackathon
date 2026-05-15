@@ -90,9 +90,6 @@ LogicLens works on:
 - LeetCode  
 - Codeforces  
 - CodeChef  
-- HackerRank  
-- GeeksforGeeks  
-- AtCoder  
 
 ---
 
