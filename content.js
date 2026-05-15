@@ -492,9 +492,14 @@ console.log(
 
 function logDetectionResults(results) {
 
+  if (
+    !Array.isArray(results)
+  ) {
+    return [];
+  }
+
   results.forEach((result) => {
 
-    // Log to console
     console.warn(
       "%cLOGICLENS DETECTION:",
       "color:#ff1744;font-weight:bold;",
@@ -513,147 +518,72 @@ function logDetectionResults(results) {
       result.suggestion
     );
 
-    // =====================================
-    // OPTIONAL FIX EXAMPLE
-    // =====================================
-
-    if (result.exampleFix) {
-
-      console.log(
-        "%cFIX EXAMPLE:",
-        "color:#ff9800;font-weight:bold;",
-        result.exampleFix
-      );
-
-    }
-
-    // =====================================
-    // EDUCATIONAL MAPPING LAYER
-    // =====================================
-
-    if (result.concept) {
-
-      console.log(
-        "%cCONCEPT:",
-        "color:#ff5722;font-weight:bold;",
-        result.concept
-      );
-
-    }
-
-    if (result.topic) {
-
-      console.log(
-        "%cTOPIC:",
-        "color:#9c27b0;font-weight:bold;",
-        result.topic
-      );
-
-    }
-
-    if (result.learningHint) {
-
-      console.log(
-        "%cLEARNING HINT:",
-        "color:#4caf50;font-weight:bold;",
-        result.learningHint
-      );
-
-    }
-
-    // =====================================
-    // DISPLAY IN UI CHAT PANEL
-    // =====================================
-    if (window.LogicLensChatPanel) {
-      LogicLensChatPanel.displayMessage(result);
-    }
-
   });
+
+  return results;
 
 }
 
 // ==========================================
 // RUN ALL RULES
 // ==========================================
+const detections = [
+
+  ...detectOffByOne(ast),
+
+  ...detectInfiniteLoop(ast),
+
+  ...detectMissingBaseCase(ast),
+
+  ...detectNullAccess(ast),
+
+  ...detectAssignmentInCondition(ast),
+
+  ...detectUnreachableCode(ast),
+
+  ...detectEmptyLoopBody(ast),
+
+  ...detectApiMisuse(ast, language),
+
+  ...detectArrayMutationDuringIteration(ast),
+
+  ...detectMissingReturn(ast),
+
+  ...detectFloatingPointEquality(ast),
+
+  ...detectStackOverflowRisk(ast),
+
+  ...detectDuplicateConditions(ast),
+
+  ...detectMissingEdgeCaseHandling(ast),
+
+  ...detectSlidingWindowNotShrinking(ast),
+
+  ...detectDPStateOverwrite(ast),
+
+  ...detectBinarySearchMidOverflow(ast),
+
+  ...detectModuloByZeroRisk(ast),
+
+  ...detectMissingHashMapExistenceCheck(ast),
+
+  ...detectIncorrectLoopUpdate(ast)
+
+];
 
 logDetectionResults(
-  detectOffByOne(ast)
+  detections
 );
 
-logDetectionResults(
-  detectInfiniteLoop(ast)
-);
+if (
+  window.LogicLensChatPanel
+) {
 
-logDetectionResults(
-  detectMissingBaseCase(ast)
-);
+  window.LogicLensChatPanel.displayResults(
+    detections
+  );
 
-logDetectionResults(
-  detectNullAccess(ast)
-);
-
-logDetectionResults(
-  detectAssignmentInCondition(ast)
-);
-
-logDetectionResults(
-  detectUnreachableCode(ast)
-);
-
-logDetectionResults(
-  detectEmptyLoopBody(ast)
-);
-
-logDetectionResults(
-  detectApiMisuse(ast, language)
-);
-
-logDetectionResults(
-  detectArrayMutationDuringIteration(ast)
-);
-
-logDetectionResults(
-  detectMissingReturn(ast)
-);
-
-logDetectionResults(
-  detectFloatingPointEquality(ast)
-);
-
-logDetectionResults(
-  detectStackOverflowRisk(ast)
-);
-
-logDetectionResults(
-  detectDuplicateConditions(ast)
-);
-
-logDetectionResults(
-  detectMissingEdgeCaseHandling(ast)
-);
-
-logDetectionResults(
-  detectSlidingWindowNotShrinking(ast)
-);
-
-logDetectionResults(
-  detectDPStateOverwrite(ast)
-);
-
-logDetectionResults(
-  detectBinarySearchMidOverflow(ast)
-);
-logDetectionResults(
-  detectModuloByZeroRisk(ast)
-);
-logDetectionResults(
-  detectMissingHashMapExistenceCheck(ast)
-);
-
-logDetectionResults(
-  detectIncorrectLoopUpdate(ast)
-);
-
+}
 
 
 }, 500);
