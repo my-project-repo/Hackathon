@@ -75,6 +75,9 @@ function createBadge() {
     </span>
   `;
 
+  // Hide badge - we're using the chat panel instead
+  badge.style.display = 'none';
+
   document.body.appendChild(badge);
 }
 
@@ -404,6 +407,11 @@ const handleCodeUpdate = debounce((code) => {
 
   LogicLens.lastCode = code;
 
+  // Update UI status to analyzing
+  if (window.LogicLensChatPanel) {
+    LogicLensChatPanel.setAnalyzing();
+  }
+
   log("Code updated");
 
   console.log(
@@ -486,6 +494,7 @@ function logDetectionResults(results) {
 
   results.forEach((result) => {
 
+    // Log to console
     console.warn(
       "%cLOGICLENS DETECTION:",
       "color:#ff1744;font-weight:bold;",
@@ -550,6 +559,13 @@ function logDetectionResults(results) {
         result.learningHint
       );
 
+    }
+
+    // =====================================
+    // DISPLAY IN UI CHAT PANEL
+    // =====================================
+    if (window.LogicLensChatPanel) {
+      LogicLensChatPanel.displayMessage(result);
     }
 
   });
@@ -803,6 +819,11 @@ function initializeLogicLens() {
   log("LogicLens Loaded");
 
   createBadge();
+
+  // Initialize chat panel UI
+  if (window.LogicLensChatPanel) {
+    LogicLensChatPanel.init();
+  }
 
   detectEditor();
 
