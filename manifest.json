@@ -3,9 +3,9 @@
 
   "name": "LogicLens",
 
-  "version": "1.0.0",
+  "version": "1.1.0",
 
-  "description": "Realtime DSA Mentor",
+  "description": "Realtime DSA Mentor — Static + AI Analysis",
 
   "permissions": [],
 
@@ -15,7 +15,8 @@
     "https://www.geeksforgeeks.org/*",
     "https://codeforces.com/*",
     "https://www.codechef.com/*",
-    "https://atcoder.jp/*"
+    "https://atcoder.jp/*",
+    "https://api.groq.com/*"
   ],
 
   "background": {
@@ -34,6 +35,8 @@
       ],
 
       "js": [
+            "config.js",
+
             "libs/babel.min.js",
             "engine/sanitizeCode.js",
             "parsers/javascriptParser.js",
@@ -45,7 +48,7 @@
             "engine/symbolTable.js",
             "engine/patternClassifier.js",
             "engine/typeInference.js",
-
+            "engine/aiAnalyzer.js",
 
             "rules/offByOneRule.js",
             "rules/infiniteLoopRule.js",
@@ -69,7 +72,7 @@
             "rules/incorrectLoopUpdateRule.js",
 
             "ui/chat-panel.js",
-        
+
             "content.js"
             ],
 

@@ -625,3 +625,65 @@
   font-size: 13px;
   line-height: 1.7;
 }
+
+/* ==========================================
+   AI BADGE
+========================================== */
+
+.ll-ai-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  vertical-align: middle;
+  margin-right: 6px;
+  font-weight: bold;
+}
+
+/* ==========================================
+   AI THINKING BAR
+========================================== */
+
+.ll-ai-thinking-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: linear-gradient(90deg, rgba(168,85,247,0.08), transparent);
+  border-bottom: 1px solid rgba(168,85,247,0.2);
+  animation: aiBarFade 0.3s ease;
+}
+
+@keyframes aiBarFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ll-ai-thinking-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #a855f7;
+  animation: aiDotBounce 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.ll-ai-thinking-dot:nth-child(1) { animation-delay: 0s; }
+.ll-ai-thinking-dot:nth-child(2) { animation-delay: 0.15s; }
+.ll-ai-thinking-dot:nth-child(3) { animation-delay: 0.30s; }
+
+@keyframes aiDotBounce {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+  40%           { transform: scale(1.2); opacity: 1; }
+}
+
+.ll-ai-thinking-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #a855f7;
+  letter-spacing: 2px;
+}

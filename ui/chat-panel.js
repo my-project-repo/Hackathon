@@ -327,7 +327,10 @@ const LogicLensChatPanel = {
 
       <!-- ERROR CARD -->
       <div class="ll-error-card ${severity}">
-        <div class="ll-error-type">${this.escapeHtml(result.message || "Logic Error")}</div>
+        <div class="ll-error-type">
+          ${result.isAI ? '<span class="ll-ai-badge">✦ AI</span>' : ""}
+          ${this.escapeHtml(result.message || "Logic Error")}
+        </div>
         <div class="ll-error-desc">${this.escapeHtml(result.explanation || "")}</div>
         <div class="ll-error-loc">
           <span class="ll-error-loc-badge">${this.escapeHtml(result.type || "AST")}</span>
@@ -554,6 +557,40 @@ const LogicLensChatPanel = {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
+  },
+
+  /* ==========================================
+     AI THINKING INDICATOR
+  ========================================== */
+
+  showAIThinking() {
+    this._ensureElements();
+
+    // Remove any existing thinking bar
+    const existing = document.getElementById("ll-ai-thinking");
+    if (existing) existing.remove();
+
+    const bar = document.createElement("div");
+    bar.id = "ll-ai-thinking";
+    bar.className = "ll-ai-thinking-bar";
+    bar.innerHTML = `
+      <span class="ll-ai-thinking-dot"></span>
+      <span class="ll-ai-thinking-dot"></span>
+      <span class="ll-ai-thinking-dot"></span>
+      <span class="ll-ai-thinking-label">AI ANALYZING…</span>
+    `;
+
+    if (this.messagesContainer) {
+      this.messagesContainer.prepend(bar);
+    }
+
+    if (this.statusDot) this.statusDot.className = "status-dot analyzing";
+    if (this.statusText) this.statusText.textContent = "AI analyzing…";
+  },
+
+  hideAIThinking() {
+    const bar = document.getElementById("ll-ai-thinking");
+    if (bar) bar.remove();
   }
 
 };
