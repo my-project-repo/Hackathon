@@ -130,6 +130,13 @@ const LogicLensChatPanel = {
     ========================================== */
     document.addEventListener("click", (e) => {
 
+      /* MODEL CARD CLICKS */
+      const modelCard = e.target.closest(".ll-model-card");
+      if (modelCard) {
+        this._selectModel(modelCard);
+        return;
+      }
+
       /* TAB CLICKS */
       const tab = e.target.closest(".ll-err-tab");
       if (tab) {
@@ -145,6 +152,19 @@ const LogicLensChatPanel = {
         return;
       }
 
+      /* API KEY SUBMIT */
+      if (e.target.closest("#logiclens-api-submit")) {
+        this._submitApiKey();
+        return;
+      }
+
+    });
+
+    /* API KEY — submit on Enter */
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && e.target.id === "logiclens-api-input") {
+        this._submitApiKey();
+      }
     });
 
   },
@@ -266,6 +286,86 @@ const LogicLensChatPanel = {
       }, 350);
     }
 
+  },
+
+  /* ==========================================
+     MODEL SELECT
+  ========================================== */
+
+  _selectModel(cardEl) {
+
+    /* Deselect all, select clicked */
+    document.querySelectorAll(".ll-model-card").forEach(c => c.classList.remove("selected"));
+    cardEl.classList.add("selected");
+
+    /* Reveal API key section if hidden */
+    const apiSection = document.getElementById("logiclens-apikey-section");
+    if (apiSection && apiSection.classList.contains("ll-apikey-hidden")) {
+      apiSection.classList.remove("ll-apikey-hidden");
+      apiSection.classList.add("ll-apikey-reveal");
+    }
+
+  },
+
+  /* ==========================================
+     API KEY SUBMIT
+  ========================================== */
+
+  _submitApiKey() {
+
+    const btn     = document.getElementById("logiclens-api-submit");
+    const input   = document.getElementById("logiclens-api-input");
+    const section = document.getElementById("logiclens-apikey-section");
+
+    if (!btn || !input || !section) return;
+
+    const val = input.value.trim();
+
+    /* Empty check */
+    if (!val) {
+      this._shakeApiSection(section, input, "Enter your API key");
+      return;
+    }
+
+    /* Format check based on selected model */
+    const selectedModel = document.querySelector(".ll-model-card.selected")?.dataset.model;
+    const isGroq   = selectedModel === "llama";
+    const isGemini = selectedModel === "gemini";
+
+    const validGroq   = val.startsWith("gsk_") && val.length > 20;
+    const validGemini = val.startsWith("AIza") && val.length > 20;
+
+    if (isGroq && !validGroq) {
+      this._shakeApiSection(section, input, "Groq keys start with gsk_");
+      return;
+    }
+
+    if (isGemini && !validGemini) {
+      this._shakeApiSection(section, input, "Gemini keys start with AIza");
+      return;
+    }
+
+    btn.classList.add("ll-apikey-success");
+    btn.textContent = "CONNECTED";
+    input.disabled = true;
+    setTimeout(() => section.classList.add("ll-apikey-locked"), 600);
+
+  },
+
+  _shakeApiSection(section, input, hintText) {
+    section.classList.add("ll-apikey-shake");
+    setTimeout(() => section.classList.remove("ll-apikey-shake"), 400);
+    input.classList.add("ll-apikey-input-error");
+    setTimeout(() => input.classList.remove("ll-apikey-input-error"), 1200);
+    const hint = section.querySelector(".ll-apikey-hint");
+    if (hint) {
+      hint.textContent = hintText;
+      hint.classList.add("ll-apikey-hint-error");
+      setTimeout(() => {
+        hint.textContent = "Key is stored locally";
+        hint.classList.remove("ll-apikey-hint-error");
+      }, 2500);
+    }
   },
 
   /* ==========================================

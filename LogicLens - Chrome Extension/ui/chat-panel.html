@@ -53,13 +53,79 @@
 
   </div>
 
+  <!-- MODEL SELECTOR -->
+  <div class="ll-model-section" id="logiclens-model-section">
+
+    <div class="ll-section-label">SELECT MODEL</div>
+
+    <div class="ll-model-grid">
+
+      <button class="ll-model-card" id="ll-model-llama" data-model="llama">
+        <div class="ll-model-logo ll-model-logo--groq">G</div>
+        <div class="ll-model-info">
+          <div class="ll-model-name">Llama 3.3</div>
+          <div class="ll-model-sub">70B · Versatile</div>
+        </div>
+        <div class="ll-model-check">✓</div>
+      </button>
+
+      <button class="ll-model-card" id="ll-model-gemini" data-model="gemini">
+        <div class="ll-model-logo ll-model-logo--gemini">◈</div>
+        <div class="ll-model-info">
+          <div class="ll-model-name">Gemini 2.0</div>
+          <div class="ll-model-sub">Flash · Experimental</div>
+        </div>
+        <div class="ll-model-check">✓</div>
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- API KEY INPUT — hidden until model selected -->
+  <div class="ll-apikey-section ll-apikey-hidden" id="logiclens-apikey-section">
+
+    <div class="ll-section-label">API ACCESS</div>
+
+    <div class="ll-apikey-row">
+
+      <div class="ll-apikey-input-wrap">
+
+        <span class="ll-apikey-prefix">sk—</span>
+
+        <input
+          type="password"
+          id="logiclens-api-input"
+          class="ll-apikey-input"
+          placeholder="enter your api key here"
+          autocomplete="off"
+          spellcheck="false"
+        />
+
+      </div>
+
+      <button
+        class="ll-apikey-submit"
+        id="logiclens-api-submit"
+      >
+        SUBMIT
+      </button>
+
+    </div>
+
+    <div class="ll-apikey-hint">
+      Key is stored locally
+    </div>
+
+  </div>
+
   <!-- STATUS BAR -->
   <div class="logiclens-status-bar">
 
     <div class="status-dot"></div>
 
     <div class="status-text">
-      Tracking Monaco Editor
+      Tracking Code Editor
     </div>
 
   </div>

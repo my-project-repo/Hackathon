@@ -5,6 +5,7 @@ Runs alongside static rules to catch errors
 the 20 hardcoded rules can't detect.
 ==================================================
 */
+
 const LogicLensAI = {
 
   _debounceTimer: null,
